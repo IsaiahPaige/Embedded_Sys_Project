@@ -1,0 +1,77 @@
+﻿#include <AFMotor.h>  //library for motorshield
+
+#include <NewPing.h>  //library for sonar sensor
+
+
+#define TRIGGER_PIN 13   // setting ping 13 to send waves
+
+#define ECHO_PIN 2     // setting pin 2 to recieve waves
+
+#define MAX_DISTANCE 200  //max distance 200cm
+ 
+
+NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+
+
+
+AF_DCMotor motor1(1, MOTOR12_64KHZ);
+
+AF_DCMotor motor2(2, MOTOR12_64KHZ);
+
+
+
+
+void setup()
+{
+
+motor1.setSpeed(200);     // set the speed to 200/255
+motor2.
+setSpeed(200);
+
+Serial.begin(9600);       //Sets baud-rate for the Serial console
+
+}
+ 
+
+
+void loop() {
+   delay(25);
+   
+unsigned int uS = sonar.ping_cm();
+   
+Serial.print(uS);           //uS distance between sonr and obstacle
+   
+Serial.println(“cm”);       // reading values from the sonar
+   
+   
+motor1.run(BACKWARD);      // go forward
+   
+motor2.run(BACKWARD);
+   
+if(uS >= 10)               //obstacle near by
+   
+{  
+    motor1.run(RELEASE);      // stop
+    
+	motor2.run(RELEASE);
+    
+delay(1000);
+   
+    
+motor1.run(BACKWARD);     //turn right
+    
+motor2.run(RELEASE);
+    delay(500);
+   
+}
+   
+
+motor1.run(BACKWARD);      // go forward
+   
+motor2.run(BACKWARD);
+   
+   
+}
+// When sauttering the motor we reversed the polarity by accident. So FORWAR is Backward and vieversa
+
+
